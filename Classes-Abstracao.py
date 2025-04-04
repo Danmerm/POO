@@ -7,6 +7,13 @@ class Forma(ABC):
     def calcular_area(self):
         pass  # Método abstrato, deve ser implementado pelas subclasses
 
+# Classe Quadrado
+class Quadrado(Forma):
+    def __init__(self, lado):
+        self.lado = lado
+
+    def calcular_area(self):
+        return self.lado**2
 
 # Classe Retangulo
 class Retangulo(Forma):
@@ -63,6 +70,7 @@ def exibir_area(forma):
 # Exemplo de uso
 if __name__ == "__main__":
     # Criando objetos das classes derivadas
+    quadrado = Quadrado(lado=5)
     retangulo = Retangulo(base=5, altura=10)
     circulo = Circulo(raio=7)
     triangulo = Triangulo(base=6, altura=8)
@@ -70,6 +78,7 @@ if __name__ == "__main__":
     trapezio = Trapezio(base_1=6, base_2=3, altura=8)
 
     # Usando polimorfismo para tratar objetos de diferentes classes de forma uniforme
+    exibir_area(quadrado)  # Saída: A área da forma é: 50.00
     exibir_area(retangulo)  # Saída: A área da forma é: 50.00
     exibir_area(circulo)    # Saída: A área da forma é: 153.94
     exibir_area(triangulo)  # Saída: A área da forma é: 24.00
