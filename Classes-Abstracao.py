@@ -60,7 +60,16 @@ class Trapezio(Forma):
         self.altura = altura
 
     def calcular_area(self):
-        return (self.base_1+self.base_2)* self.altura / 2
+        return (self.base_1+self.base_2)* self.altura / 2.
+
+# Classe Losango
+class Losango(Forma):
+    def __init__(self, diagM, diagm):
+        self.diagM = diagM
+        self.diagm = diagm
+
+    def calcular_area(self):
+        return self.diagM * self.diagm/2.
 
 # Função para demonstrar polimorfismo
 def exibir_area(forma):
@@ -76,16 +85,18 @@ if __name__ == "__main__":
     triangulo = Triangulo(base=6, altura=8)
     regAnularCircular = RegAnularCircular(raio_1=3, raio_2=7)
     trapezio = Trapezio(base_1=6, base_2=3, altura=8)
+    losango = Losango(diagM=5, diagm=10)
 
     # Usando polimorfismo para tratar objetos de diferentes classes de forma uniforme
-    exibir_area(quadrado)  # Saída: A área da forma é: 50.00
+    exibir_area(quadrado)  # Saída: A área da forma é: 25.00
     exibir_area(retangulo)  # Saída: A área da forma é: 50.00
     exibir_area(circulo)    # Saída: A área da forma é: 153.94
     exibir_area(triangulo)  # Saída: A área da forma é: 24.00
     exibir_area(regAnularCircular)  # Saída: A área da forma é: 125.66
     exibir_area(trapezio)  # Saída: A área da forma é: 36.00
+    exibir_area(losango)  # Saída: A área da forma é: 25.00
 
     # Armazenando objetos em uma lista e iterando sobre eles
-    formas = [retangulo, circulo, triangulo, regAnularCircular, trapezio]
+    formas = [retangulo, circulo, triangulo, regAnularCircular, trapezio, losango]
     for forma in formas:
         exibir_area(forma)
