@@ -51,6 +51,8 @@ class Pessoa:
 # Exemplo de uso da classe Pessoa
 pessoa1 = Pessoa(nome="João Silva", idade=30, cpf="12345678901")
 pessoa1.exibir_informacoes() # Exibindo informações atualizadas
+pessoa2 = Pessoa(nome="Jhon Doe", idade=45, cpf="90123456789")
+pessoa2.exibir_informacoes() # Exibindo informações atualizadas
 
 # Acessando atributos usando getters
 print("Nome:", pessoa1.nome)  # Saída: João Silva
@@ -62,6 +64,11 @@ pessoa1.nome = "Maria Oliveira"  # Nome válido
 pessoa1.idade = 25  # Idade válida
 pessoa1.cpf = "98765432100"  # CPF válido
 pessoa1.exibir_informacoes() # Exibindo informações atualizadas Maria Oliveira, Idade: 25, CPF: 98765432100
+
+pessoa2.nome = "Joan Doe"  # Nome válido
+pessoa2.idade = 25  # Idade válida
+pessoa2.cpf = "98765432100"  # CPF válido
+pessoa2.exibir_informacoes() # Exibindo informações atualizadas Maria Oliveira, Idade: 25, CPF: 98765432100
 
 # Tentando atribuir valores inválidos
 pessoa1.nome = ""  # Erro: Nome inválido.
