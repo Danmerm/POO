@@ -43,6 +43,7 @@ if __name__ == "__main__":
     produto1 = Produto(nome="Notebook", preco=3500.0)
     produto2 = Produto(nome="Mouse", preco=50.0)
     produto3 = Produto(nome="Teclado", preco=150.0)
+    produto4 = Produto(nome="carregador", preco=100.0)
 
     # Criando cliente
     cliente = Cliente(nome="João Silva", email="joao.silva@example.com")
@@ -53,6 +54,7 @@ if __name__ == "__main__":
     pedido.adicionar_produto(produto2)
     pedido.adicionar_produto(produto3)
     pedido.adicionar_produto(produto2)
+    pedido.adicionar_produto(produto4)
     # Exibindo o pedido
     print(pedido)
 
