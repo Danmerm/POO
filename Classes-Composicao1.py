@@ -51,12 +51,14 @@ if __name__ == "__main__":
     autor1 = Autor(nome="Machado de Assis", nacionalidade="Brasileiro")
     autor2 = Autor(nome="George Orwell", nacionalidade="Britânico")
     autor3 = Autor(nome="Mario V. Llosa", nacionalidade="Peruano")
+    autor4 = Autor(nome="Gabriel Garcia Marques", nacionalidade="Colombiano")
 
     # Criando livros
     livro1 = Livro(titulo="Dom Casmurro", ano_publicacao=1899, autor=autor1)
     livro2 = Livro(titulo="1984", ano_publicacao=1949, autor=autor2)
     livro3 = Livro(titulo="Memórias Póstumas de Brás Cubas", ano_publicacao=1881, autor=autor1)
     livro4 = Livro(titulo="La tia Julia y el escribidor", ano_publicacao=1977, autor=autor3)
+    livro5 = Livro(titulo="Cem anos de solidao", ano_publicacao=1967, autor=autor4)
 
     # Criando a biblioteca e adicionando livros
     biblioteca = Biblioteca()
@@ -64,6 +66,7 @@ if __name__ == "__main__":
     biblioteca.adicionar_livro(livro2)
     biblioteca.adicionar_livro(livro3)
     biblioteca.adicionar_livro(livro4)
+    biblioteca.adicionar_livro(livro5)
 
     # Listando todos os livros na biblioteca
     biblioteca.listar_livros()
@@ -72,4 +75,5 @@ if __name__ == "__main__":
     biblioteca.buscar_livros_por_autor("Machado de Assis")
     biblioteca.buscar_livros_por_autor("George Orwell")
     biblioteca.buscar_livros_por_autor("Mario V. Llosa")
+    biblioteca.buscar_livros_por_autor("Gabriel Garcia Marques")
     biblioteca.buscar_livros_por_autor("J.K. Rowling")  # Autor não existente
