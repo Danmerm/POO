@@ -29,8 +29,12 @@ class Vaca(Animal):
 # Classe derivada Vaca
 class Galo(Animal):
     def fazer_som(self):
-        return "Co co ri co!"    
-
+        return "Co co ri co!"
+    
+# Classe derivada sapo
+class Sapo(Animal):
+    def fazer_som(self):
+        return "Croc croc!"  
 
 # Função para demonstrar polimorfismo
 def ouvir_som(animal):
@@ -45,6 +49,7 @@ if __name__ == "__main__":
     pato = Pato()
     vaca = Vaca()
     galo = Galo()
+    sapo = Sapo()
 
     # Usando polimorfismo para tratar objetos de diferentes classes de forma uniforme
     ouvir_som(cachorro)  # Saída: Au Au!
@@ -54,6 +59,6 @@ if __name__ == "__main__":
     ouvir_som(galo)      # Saída: Co co ri co!
 
     # Armazenando objetos em uma lista e iterando sobre eles
-    animais = [cachorro, gato, pato, vaca, galo]
+    animais = [cachorro, gato, pato, vaca, galo, sapo]
     for animal in animais:
         ouvir_som(animal)
