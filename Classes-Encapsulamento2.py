@@ -59,6 +59,9 @@ if __name__ == "__main__":
 
     # Tentando depositar um valor negativo
     conta.depositar(-10) # Saída: Erro: O valor do depósito deve ser positivo.
+    
+    # Realizando operações
+    conta.depositar(50)  # Saída: Depósito de R$50.00 realizado. Novo saldo: R$150.00
 
     # Alterando o titular
     conta.titular = "Maria Oliveira"
