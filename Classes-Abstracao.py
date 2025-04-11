@@ -73,19 +73,19 @@ if __name__ == "__main__":
     quadrado = Quadrado(lado=5)
     retangulo = Retangulo(base=5, altura=10)
     circulo = Circulo(raio=7)
-    triangulo = Triangulo(base=6, altura=8)
-    regAnularCircular = RegAnularCircular(raio_1=3, raio_2=7)
-    trapezio = Trapezio(base_1=6, base_2=3, altura=8)
+    # triangulo = Triangulo(base=6, altura=8)
+    # regAnularCircular = RegAnularCircular(raio_1=3, raio_2=7)
+    # trapezio = Trapezio(base_1=6, base_2=3, altura=8)
 
     # Usando polimorfismo para tratar objetos de diferentes classes de forma uniforme
     exibir_area(quadrado)  # Saída: A área da forma é: 50.00
     exibir_area(retangulo)  # Saída: A área da forma é: 50.00
     exibir_area(circulo)    # Saída: A área da forma é: 153.94
-    exibir_area(triangulo)  # Saída: A área da forma é: 24.00
-    exibir_area(regAnularCircular)  # Saída: A área da forma é: 125.66
-    exibir_area(trapezio)  # Saída: A área da forma é: 36.00
+    # exibir_area(triangulo)  # Saída: A área da forma é: 24.00
+    # exibir_area(regAnularCircular)  # Saída: A área da forma é: 125.66
+    # exibir_area(trapezio)  # Saída: A área da forma é: 36.00
 
     # Armazenando objetos em uma lista e iterando sobre eles
-    formas = [retangulo, circulo, triangulo, regAnularCircular, trapezio]
+    formas = [retangulo, circulo] # , triangulo, regAnularCircular, trapezio]
     for forma in formas:
         exibir_area(forma)
