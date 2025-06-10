@@ -1,7 +1,7 @@
-README
-Resolvendo Problemas comuns com Programação Orientada a Objetos (POO) e o GitHub
+# README
+## Resolvendo Problemas comuns com Programação Orientada a Objetos (POO) e o GitHub
 
-Como a POO pode tornar seu código mais modular, reutilizável e fácil de manter?
+# Como a POO pode tornar seu código mais modular, reutilizável e fácil de manter?
 
 O que é Programação Orientada a Objetos?
 Paradigma que organiza o software em objetos (instâncias de classes).
@@ -150,7 +150,7 @@ Sempre que você entrar em um repositório, seja o seu ou o de qualquer outra pe
 
 * Você irá copiar esse link e levar ele lá pro nosso terminal
 
-* O comando para puxar o projeto para a sua máquina é o `git clone https://github.com/rafaballerini/GitTutorial.git`
+* O comando para puxar o projeto para a sua máquina é o `https://github.com/Danmerm/POO/blob/main/README.md`
 
 Não é necessário criar um repositório antes disso, como fizemos anteriormente com o `git init`. Dessa vez, basta abrir o terminal e clonar o projeto e tudo aparecerá!
 
