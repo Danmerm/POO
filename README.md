@@ -162,7 +162,7 @@ E se eu fizer uma alteração no repositório, como vocês podem atualizar na m�
 
 ## Fork
 
-Mas Rafa quando eu fiz o clone do seu repositório ele não apareceu no meu Github.
+Quando fizer o clone do seu repositório e ele não aparecer no seu Github?
 Existe a ferramenta `fork`, que é bem mais simples para fazer isso
 Você só precisa apertar nesse botão dentro do repositório e TCHANAM! Ele aparece automaticamente lá na sua conta:
 
