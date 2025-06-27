@@ -2,6 +2,7 @@ import numpy as np
 from scipy.sparse import lil_matrix, csr_matrix
 from scipy.sparse.linalg import spsolve
 import matplotlib.pyplot as plt
+import Conversor_Unidades as con
 
 class ReservoirSimulator:
     def __init__(self):
@@ -83,7 +84,7 @@ class ReservoirSimulator:
             for j in range(self.ny):
                 for k in range(self.nz):
                     dx_avg = 0.5 * (self.dx[i-1] + self.dx[i])
-                    kx_avg = 2 * self.kx[i-1,j,k] * self.kx[i,j,k] / (self.kx[i-1,j,k] + self.kx[i,j,k] + 1e-20)
+                    kx_avg = 2 * self.kx[i-1,j,k] * self.kx[i,j,k] / (self.kx[i-1,j,k] + self.kx[i,j,k] + 0*1e-20)
                     area = self.dy[j] * self.dz[k]
                     tx[i,j,k] = kx_avg * area / dx_avg
                     
@@ -92,7 +93,7 @@ class ReservoirSimulator:
             for j in range(1, self.ny):
                 for k in range(self.nz):
                     dy_avg = 0.5 * (self.dy[j-1] + self.dy[j])
-                    ky_avg = 2 * self.ky[i,j-1,k] * self.ky[i,j,k] / (self.ky[i,j-1,k] + self.ky[i,j,k] + 1e-20)
+                    ky_avg = 2 * self.ky[i,j-1,k] * self.ky[i,j,k] / (self.ky[i,j-1,k] + self.ky[i,j,k] + 0*1e-20)
                     area = self.dx[i] * self.dz[k]
                     ty[i,j,k] = ky_avg * area / dy_avg
                     
@@ -101,7 +102,7 @@ class ReservoirSimulator:
             for j in range(self.ny):
                 for k in range(1, self.nz):
                     dz_avg = 0.5 * (self.dz[k-1] + self.dz[k])
-                    kz_avg = 2 * self.kz[i,j,k-1] * self.kz[i,j,k] / (self.kz[i,j,k-1] + self.kz[i,j,k] + 1e-20)
+                    kz_avg = 2 * self.kz[i,j,k-1] * self.kz[i,j,k] / (self.kz[i,j,k-1] + self.kz[i,j,k] + 0*1e-20)
                     area = self.dx[i] * self.dy[j]
                     tz[i,j,k] = kz_avg * area / dz_avg
                     
@@ -136,7 +137,7 @@ class ReservoirSimulator:
         
         return porosity, viscosity, density
         
-    def assemble_system(self, pres, pressure_old, dt):
+    def assemble_system(self, pressure_old, dt):
         n_cells = self.nx * self.ny * self.nz
         A = lil_matrix((n_cells, n_cells))
         b = np.zeros(n_cells)
@@ -145,20 +146,25 @@ class ReservoirSimulator:
         
         # Pré-calcula propriedades nas células
         porosity_old, viscosity_old, density_old = self.update_properties(pressure_old)
-        porosity, viscosity, density = self.update_properties(pres)
+        # porosity, viscosity, density = self.update_properties(pres)
         for k in range(self.nz):
             for j in range(self.ny):
                 for i in range(self.nx):
                     idx = i + j*self.nx + k*self.nx*self.ny
                     
-                    # Termo acumulativo
-                    # porosity, viscosity, density = self.update_properties(pres[i,j,k])
-                    vol = self.dx[i] * self.dy[j] * self.dz[k]
+                    # # Termo acumulativo
+                    # # porosity, viscosity, density = self.update_properties(pres[i,j,k])
+                    # vol = self.dx[i] * self.dy[j] * self.dz[k]
+                    # # accum = vol * porosity[i,j,k] * density[i,j,k] / (viscosity[i,j,k])
                     # accum = vol * porosity[i,j,k] * density[i,j,k] / (viscosity[i,j,k])
-                    accum = vol * porosity[i,j,k] * density[i,j,k] / (viscosity[i,j,k])
+                    # accum_old = vol * porosity_old[i,j,k] * density_old[i,j,k] / (viscosity_old[i,j,k])
+                    
+                    porosity, viscosity, density = self.update_properties(pres)
+                    vol = self.dx[i] * self.dy[j] * self.dz[k]
+                    accum = vol * porosity * density / (viscosity)
                     accum_old = vol * porosity_old[i,j,k] * density_old[i,j,k] / (viscosity_old[i,j,k])
                     
-                    A[idx, idx] = (accum - accum_old) / dt
+                    A[idx, idx] = 0*(accum[i,j,k] - accum_old) / dt
                     b[idx] = 0.0
                     
                     # # Geometria da célula
@@ -199,7 +205,7 @@ class ReservoirSimulator:
                         idx_neighbor = (i-1) + j*self.nx + k*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i-1,j,k])
                         density_avg = 0.5 * (density[i,j,k] + density[i-1,j,k])
-                        trans = tx[i,j,k] * density_avg / viscosity_avg
+                        trans = tx[i,j,k] / viscosity_avg #tx[i,j,k] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -210,7 +216,7 @@ class ReservoirSimulator:
                         idx_neighbor = (i+1) + j*self.nx + k*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i+1,j,k])
                         density_avg = 0.5 * (density[i,j,k] + density[i+1,j,k])
-                        trans = tx[i+1,j,k] * density_avg / viscosity_avg
+                        trans = tx[i+1,j,k] / viscosity_avg#tx[i+1,j,k] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -222,7 +228,7 @@ class ReservoirSimulator:
                         idx_neighbor = i + (j-1)*self.nx + k*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i,j-1,k])
                         density_avg = 0.5 * (density[i,j,k] + density[i,j-1,k])
-                        trans = ty[i,j,k] * density_avg / viscosity_avg
+                        trans = ty[i,j,k] / viscosity_avg #ty[i,j,k] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -233,7 +239,7 @@ class ReservoirSimulator:
                         idx_neighbor = i + (j+1)*self.nx + k*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i,j+1,k])
                         density_avg = 0.5 * (density[i,j,k] + density[i,j+1,k])
-                        trans = ty[i,j+1,k] * density_avg / viscosity_avg
+                        trans = ty[i,j+1,k] / viscosity_avg #ty[i,j+1,k] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -245,7 +251,7 @@ class ReservoirSimulator:
                         idx_neighbor = i + j*self.nx + (k-1)*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i,j,k-1])
                         density_avg = 0.5 * (density[i,j,k] + density[i,j,k-1])
-                        trans = tz[i,j,k] * density_avg / viscosity_avg
+                        trans = tz[i,j,k] / viscosity_avg #tz[i,j,k] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -256,7 +262,7 @@ class ReservoirSimulator:
                         idx_neighbor = i + j*self.nx + (k+1)*self.nx*self.ny
                         viscosity_avg = 0.5 * (viscosity[i,j,k] + viscosity[i,j,k+1])
                         density_avg = 0.5 * (density[i,j,k] + density[i,j,k+1])
-                        trans = tz[i,j,k+1] * density_avg / viscosity_avg
+                        trans = tz[i,j,k+1] / viscosity_avg #tz[i,j,k+1] * density_avg / viscosity_avg
                         
                         A[idx, idx] += trans
                         A[idx, idx_neighbor] -= trans
@@ -330,7 +336,7 @@ class ReservoirSimulator:
         pressure_old = self.pres.copy()
         
         # Monta e resolve o sistema linear
-        A, b = self.assemble_system(pres, pressure_old, dt)
+        A, b = self.assemble_system(pressure_old, dt)
         pressure_new_flat = spsolve(A, b)
         
         # Atualiza a pressão no reservatório
@@ -395,29 +401,52 @@ if __name__ == "__main__":
     simulator = ReservoirSimulator()
     
     # Definir parâmetros do reservatório (exemplo)
-    nx, ny, nz = 100, 100, 1
-    dx = np.full(nx, 1.0)  # 100m em x
-    dy = np.full(ny, 1.0)  # 100m em y
-    dz = np.full(nz, 1.0)   # 20m em z
-    
-    kx = ky = kz = np.full((nx, ny, nz), 1000.0)  # 100 mD em todas as direções
-    pres = np.full((nx, ny, nz), 20000.0)  # 20000 kPa inicial
-    por = np.full((nx, ny, nz), 0.2)   # Porosidade de 20%
-    
-    pref = 20000.0    # kPa
+    nx, ny, nz = 4, 4, 1
+    dx = np.full(nx, 20.0)  # 100m em x
+    dy = np.full(ny, 20.0)  # 100m em y
+    dz = np.full(nz, 10.0)   # 20m em z
+
+    # Adicionar poços
+    # simulator.add_well('producer', 0.1, 1, 1, 1, 'rate', 100.0)  # Produtor com BHP de 15000 kPa
+    simulator.add_well('producer', 0.1, 4, 4, 1,'pressure', 12000.0) # Produtor com BHP de 15000 kPa
+    simulator.add_well('injector', 0.1, 1, 1, 1, 'rate', 10.0)        # Injtor com 100 m3/dia
+
+    #Conversão de unidades para o SI
     por_ref = 0.2
-    visref = 1.0      # cP
+    pref = 20000.0    # kPa
+    pref = con.Convert_kPa_to_Pa(pref)
+    visref = 1.02      # cP
+    visref= con.ConvertBtoI.viscosity(visref)   #De cP => Pa.s
     rhoref = 1000.0   # kg/m3
-    compf = 1e-6      # 1/kPa
-    compr = 1e-6      # 1/kPa
-    vispr = 1e-7      # cp/kPa
+    compf = 1e-9      # 1e-6 1/kPa => 1/Pa
+    compr = 1e-9      # 1e-6 1/kPa => 1/Pa
+    vispr = 1e-7*1e-6      # 1e-7 cp/kPa
+
+    #Dos poços
+    for r in range(len(simulator.wells[:])):
+        if simulator.wells[r]['control_type']=='rate':
+            simulator.wells[r]['control_value']=con.ConvertBtoI.flow_rate(simulator.wells[r]['control_value']) 
+        elif simulator.wells[r]['control_type']=='pressure':
+            simulator.wells[r]['control_value']=con.Convert_kPa_to_Pa(simulator.wells[r]['control_value'])
+        else:
+            exit('Warning: Estratégia de controle do poço número ', r, 'não detetada')
+        #Outras variáveis
+    Permeabx = 250
+    Perm_X=con.ConvertBtoI.permeability(Permeabx)    #De mD => m2
+    Perm_Y=con.ConvertBtoI.permeability(Permeabx)
+    Perm_Z=con.ConvertBtoI.permeability(Permeabx)
+    #A densidade já está em SI e não é utilizada
+
+    kx = ky = kz = np.full((nx, ny, nz), Perm_X)  # 100 mD em todas as direções
+    pres = np.full((nx, ny, nz), pref)  # 20000 kPa inicial
+    por = np.full((nx, ny, nz), por_ref)   # Porosidade de 20%
     
     # Inicializar simulador
     simulator.initialize(nx, ny, nz, dx, dy, dz, kx, ky, kz, pres, por, por_ref,
                         pref, visref, rhoref, compf, compr, vispr)
     
-    # Adicionar poços
-    simulator.add_well('producer', 0.1, 1, 1, 1, 'rate', 100.0)  # Produtor com BHP de 15000 kPa
+    # # Adicionar poços
+    # simulator.add_well('producer', 0.1, 1, 1, 1, 'rate', 100.0)  # Produtor com BHP de 15000 kPa
     # simulator.add_well('injector', 0.1, 100, 100, 1, 'rate', 100.0)        # Injtor com 100 m3/dia
     
     # Configurar tempo de simulação
